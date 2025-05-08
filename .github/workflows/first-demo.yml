@@ -1,0 +1,29 @@
+# workflow name
+name: My First Workflow
+# an event that trigger workflow
+on: push
+# jobs is what process should this workflow do
+jobs: 
+  # the job name
+  running-test:
+    # specified the runners machine or the environtment will use to run a job
+    runs-on: ubuntu-latest
+    steps:
+    # Github actions required to download our codes/project from the repository
+    - name: Pull/download the codes
+      # uses is a key to using github actions
+      # for more info about checkout actions, please visit this page https://github.com/marketplace/actions/checkout
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Test running command
+      run: |
+        echo "Hello world"
+        echo "run multiple command"
+    - name: goodbye
+      run: echo "Good bye"
+    
