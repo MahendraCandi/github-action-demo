@@ -1,11 +1,11 @@
 # workflow name
-name: My First Workflow
+name: Deploy Project
 # an event that trigger workflow
 on: push
 # jobs is what process should this workflow do
 jobs: 
   # the job name
-  running-test:
+  test-and-build:
     # specified the runners machine or the environtment will use to run a job
     runs-on: ubuntu-latest
     steps:
@@ -25,4 +25,18 @@ jobs:
     - name: Test
       run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean verify
     - name: Package
+      run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean package -DskipTests=true
+  # if second job presented in the workflow, it will be run parallel with the first job
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Pull/download the codes
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Deploy
       run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean package -DskipTests=true
