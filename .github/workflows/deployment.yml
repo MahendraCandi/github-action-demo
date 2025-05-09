@@ -2,7 +2,16 @@
 name: Deploy Project
 # an event that trigger workflow
 # use bracket to specify multiple events
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+      # push event can have filters
+      branches:
+        # The ** wildcard matches any character including slash (/) in branch and tag names.
+        # ex: feature/beta-a/my-branch feature/your-branch
+        # See: https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+        - feature/**
+        - release/**
 # jobs is what process should this workflow do
 jobs: 
   # the job name
