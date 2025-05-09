@@ -1,7 +1,8 @@
 # workflow name
 name: Deploy Project
 # an event that trigger workflow
-on: push
+# use bracket to specify multiple events
+on: [push, workflow_dispatch]
 # jobs is what process should this workflow do
 jobs: 
   # the job name
