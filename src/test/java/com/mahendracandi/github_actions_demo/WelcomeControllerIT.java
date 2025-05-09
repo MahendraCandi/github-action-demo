@@ -29,6 +29,6 @@ class WelcomeControllerIT {
 				.then()
 				.log().all()
 				.assertThat()
-				.body("message", Matchers.equalTo("Welcome to Github Actions Dem!"));
+				.body("message", Matchers.equalTo("Welcome to Github Actions Demo!"));
 	}
 }

@@ -20,6 +20,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build with Maven
-      run: mvn -B clean package --file pom.xml
-    
+    - name: Compile
+      run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean compile
+    - name: Test
+      run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean verify
+    - name: Package
+      run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean package -DskipTests=true
