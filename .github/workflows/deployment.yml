@@ -14,8 +14,9 @@ on:
         - release/**
 env:
   DB_URL: localhost
-  DB_USER: user
-  DB_PASSWORD: password
+  # this is example how to use secret. the value are stored in the github "settings/secret and variable" menu
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 # jobs is what process should this workflow do
 jobs: 
   # the job name
