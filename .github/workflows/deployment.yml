@@ -13,7 +13,7 @@ on:
         - feature/**
         - release/**
 env:
-  DB_URL: url
+  DB_URL: localhost
   DB_USER: user
   DB_PASSWORD: password
 # jobs is what process should this workflow do
