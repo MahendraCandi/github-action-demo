@@ -31,7 +31,10 @@ class WelcomeControllerIT {
 				.then()
 				.log().all()
 				.assertThat()
-				.body("message", Matchers.equalTo("Welcome to Github Actions Demo!"));
+				.body("message", Matchers.equalTo("Welcome to Github Actions Demo!"))
+				.body("testProperties.url", Matchers.equalTo("localhost"))
+				.body("testProperties.username", Matchers.equalTo("user"))
+				.body("testProperties.password", Matchers.equalTo("password"));
 	}
 
 	@Test
