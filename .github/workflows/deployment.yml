@@ -38,6 +38,10 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    # outputs is a keyword to define the output from this job and can be used in other jobs
+    outputs:
+      app_name: ${{ steps.get-app-name.outputs.app_name }}
+      version: ${{ steps.get-version.outputs.version }}
     steps:
       - name: Pull/download the codes
         uses: actions/checkout@v4
@@ -52,7 +56,7 @@ jobs:
       - name: Extract version from pom.xml
         id: get-version # this is step id required if we want to use the "output" result from this step
         # echo "VERSION=$VERSION" >> $GITHUB_ENV means to set the VERSION to github env (works only on same job)
-        # echo "version=$VERSION" >> $GITHUB_OUTPUT means to set the version to github output (works on different job)
+        # echo "version=$VERSION" >> $GITHUB_OUTPUT means to set the version to github output (works on different job) see the output keywords above
         # to uses the github output, please use this script ${{ steps.get-version.outputs.version }}
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
