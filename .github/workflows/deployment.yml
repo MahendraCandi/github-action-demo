@@ -74,13 +74,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Pull/download the codes
-      uses: actions/checkout@v4
-    - name: Setup Java
-      uses: actions/setup-java@v4
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
       with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Deploy
-      run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean package -DskipTests=true
+        name: ${{ steps.get-app-name.outputs.app_name }}-${{ steps.get-version.outputs.version }}
+    - name: Check download content
+      run: ls -lsta
