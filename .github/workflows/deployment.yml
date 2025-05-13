@@ -15,7 +15,7 @@ on:
 # jobs is what process should this workflow do
 jobs: 
   # the job name
-  test-and-build:
+  test:
     # specified the runners machine or the environtment will use to run a job
     runs-on: ubuntu-latest
     steps:
@@ -34,12 +34,44 @@ jobs:
       run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean compile
     - name: Test
       run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean verify
-    - name: Package
-      run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean package -DskipTests=true
   # if second job presented in the workflow, it will be run parallel with the first job
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull/download the codes
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Package
+        run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean package -DskipTests=true
+      - name: Extract version from pom.xml
+        id: get-version # this is step id required if we want to use the "output" result from this step
+        # echo "VERSION=$VERSION" >> $GITHUB_ENV means to set the VERSION to github env (works only on same job)
+        # echo "version=$VERSION" >> $GITHUB_OUTPUT means to set the version to github output (works on different job)
+        # to uses the github output, please use this script ${{ steps.get-version.outputs.version }}
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Extract App Name from pom.xml
+        id: get-app-name
+        run: |
+          APP_NAME=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          echo "app_name=$APP_NAME" >> $GITHUB_OUTPUT
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.get-app-name.outputs.app_name }}-${{ steps.get-version.outputs.version }}
+          path: target/*.jar
   deploy:
     # by using needs, we can specify which job should be completed first before this job run
-    needs: test-and-build
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - name: Pull/download the codes
