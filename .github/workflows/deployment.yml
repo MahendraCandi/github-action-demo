@@ -39,6 +39,20 @@ jobs:
       run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean compile
     - name: Test
       run: mvn  --batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=false -DdeployAtEnd=false -Drevision=$VERSION clean verify
+    - name: Upload test result
+      if: success() || failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: failsafe-reports
+        path: target/failsafe-reports/*
+    - name: Check test result
+      uses: dorny/test-reporter@v2
+      with:
+        artifact: failsafe-reports
+        name: JUnit Test
+        path: target/failsafe-reports/*.xml
+        reporter: java-junit
+
   # if second job presented in the workflow, it will be run parallel with the first job
   build:
     needs: test
