@@ -43,14 +43,14 @@ jobs:
       if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
-        name: failsafe-reports
+        name: com/mahendracandi/github_actions_demo
         path: target/failsafe-reports/*
     - name: Check test result
       uses: dorny/test-reporter@v2
       with:
         artifact: failsafe-reports
         name: JUnit Test
-        path: failsafe-reports/TEST-*.xml
+        path: com/mahendracandi/github_actions_demo/TEST-*.xml
         reporter: java-junit
 
   # if second job presented in the workflow, it will be run parallel with the first job
