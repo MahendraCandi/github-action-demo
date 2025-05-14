@@ -50,7 +50,7 @@ jobs:
       with:
         artifact: failsafe-reports
         name: JUnit Test
-        path: target/failsafe-reports/*.xml
+        path: failsafe-reports/TEST-*.xml
         reporter: java-junit
 
   # if second job presented in the workflow, it will be run parallel with the first job
