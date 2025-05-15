@@ -81,11 +81,11 @@ jobs:
   deploy:
     # by using needs, we can specify which job should be completed first before this job run
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, X64]
     steps:
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
         name: ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}
     - name: Check download content
-      run: ls -lsta
+      run: pwd & ls -lsta
