@@ -92,6 +92,6 @@ jobs:
     - name: Kill exisiting Jar
       run: pkill -f ${{ needs.build.outputs.app_name }}-*\.jar || true
     - name: Run Jar
-      run: nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL=$DB_URL --DB_USER=$DB_USER --DB_PASSWORD=$DB_PASSWORD > app.log 2>&1 & | at now
+      run: echo "nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL=`$DB_URL` --DB_USER=`$DB_USER` --DB_PASSWORD=`$DB_PASSWORD` > app.log 2>&1 &" | at now
     - name: Check running process
       run: ps -ef | grep java | grep ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar
