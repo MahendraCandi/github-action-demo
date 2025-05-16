@@ -91,7 +91,11 @@ jobs:
       run: pwd & ls -lsta & whoami & echo $SHELL
     - name: Kill exisiting Jar
       run: pkill -f ${{ needs.build.outputs.app_name }}-*\.jar || true
-    - name: Run Jar
-      run: echo "nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL='$DB_URL' --DB_USER='$DB_USER' --DB_PASSWORD='$DB_PASSWORD' > app.log 2>&1 &" | at now
+    - name: Kill old tmux session if exists
+      run: tmux kill-session -t ${{ needs.build.outputs.app_name }}-session || true
+    - name: Run Jar using tmux
+      run: tmux new -d -s ${{ needs.build.outputs.app_name }}-session "java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL='$DB_URL' --DB_USER='$DB_USER' --DB_PASSWORD='$DB_PASSWORD' > app.log 2>&1"
     - name: Check running process
       run: ps -ef | grep java | grep ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar
+    - name: Check running tmux
+      run: tmux ls || echo "No tmux sessions found"
