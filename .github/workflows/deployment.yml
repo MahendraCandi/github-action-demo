@@ -92,4 +92,4 @@ jobs:
 #    - name: Kill exisiting Jar
 #      run: pkill -f ${{ needs.build.outputs.app_name }}-*\.jar || true
     - name: Run Jar
-      run: nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL=$DB_URL --DB_USER=$DB_USER --DB_PASSWORD=$DB_PASSWORD > app.log 2>&1 &
+      run: nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar > app.log 2>&1 &
