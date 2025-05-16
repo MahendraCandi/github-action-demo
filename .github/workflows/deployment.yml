@@ -89,7 +89,7 @@ jobs:
         name: ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}
     - name: Check download content
       run: pwd & ls -lsta
-    - name: Running Jar
-      run: |
-        pkill -f ${{ needs.build.outputs.app_name }}-*\.jar || true
-        nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL=$DB_URL --DB_USER=$DB_USER --DB_PASSWORD=$DB_PASSWORD > app.log 2>&1 &
+    - name: Kill exisiting Jar
+      run: pkill -f ${{ needs.build.outputs.app_name }}-*\.jar || true
+    - name: Run Jar
+      run: nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar --DB_URL=$DB_URL --DB_USER=$DB_USER --DB_PASSWORD=$DB_PASSWORD > app.log 2>&1 &
