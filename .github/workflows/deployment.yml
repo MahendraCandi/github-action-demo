@@ -93,3 +93,5 @@ jobs:
 #      run: pkill -f ${{ needs.build.outputs.app_name }}-*\.jar || true
     - name: Run Jar
       run: nohup java -jar ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar > app.log 2>&1 &
+    - name: Check running process
+      run: ps -ef | grep java | grep ${{ needs.build.outputs.app_name }}-${{ needs.build.outputs.version }}.jar
