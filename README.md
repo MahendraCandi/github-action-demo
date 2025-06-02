@@ -4,7 +4,7 @@ Since this app is required to pass the env var, please follow this maven verify 
 ### How to build docker image:
 1. copy the project to WSL directory
 
-```rsync -av --exclude '.git/' --exclude '.github/' --exclude '.idea/' --exclude 'target/'  /mnt/d/xxx/github-actions-demo/ /home/xxx/```
+```rsync -av --exclude '.git/' --exclude '.github/' --exclude '.idea/' --exclude 'target/'  /mnt/d/xxx/github-actions-demo/ /home/xxx/github-actions-demo/```
 2. build the maven project
 
 ```mvn clean package -DskipTests```
